@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en-us" ng-app="myApp">
+    <head>
+        <title>Learn and Understand AngularJS</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+        <meta charset="UTF-8">
+
+        <!-- load bootstrap and fontawesome via CDN -->
+        <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+        <style>
+            html, body, input, select, textarea
+            {
+                font-size: 1.05em;
+            }
+            label, input { display: block; }
+        </style>
+        
+        <!-- load angular via CDN -->
+        <script src="//code.angularjs.org/1.3.0-rc.1/angular.min.js"></script>
+        <script src="app.js"></script>
+    </head>
+    <body>
+
+        <header>
+			<nav class="navbar navbar-default">
+			<div class="container">
+				<div class="navbar-header">
+					<a class="navbar-brand" href="/">MEAN Todo App</a>
+				</div>
+
+				<ul class="nav navbar-nav navbar-right">
+					<li><a href="#"><i class="fa fa-home"></i> Home</a></li>
+				</ul>
+			</div>
+			</nav>
+		</header>
+
+        <div class="container">
+
+            <div ng-controller="mainController" ng-init="initFirst()">
+        
+
+                <div class="row">
+                    <div class="col-xs-12 col-sm-4">
+                        <h3>Add Todo</h3>
+                        <form ng-submit="addTodo()" method="POST">
+                           <label>Username:</label>
+                           <input type="text" class="form-control" ng-model="newTodo.username" required="">
+                           <label>New To Do:</label>
+                           <input type="text" class="form-control" ng-model="newTodo.todo">
+                           <label>Complete:</label>
+                           <select class="form-control" ng-options="x for x in options" ng-model="newTodo.isDone"></select>
+                           <label>Attachment:</label>
+                           <select class="form-control" ng-options="x for x in options" ng-model="newTodo.hasAttachment"></select><br>
+                           <input type="submit" value="Submit" class="btn btn-info">
+                        </form>
+                        <br><div class="alert alert-success" ng-show="alertText.length > 0">{{ alertText }}</div>
+                    </div>
+
+                    
+                    <div class="col-xs-12 col-sm-8">
+                        <h3>Todos</h3>
+                        <li ng-repeat="todo in todos">{{ todo.todo }} <br>
+                             <small>Username: {{ todo.username }}</small>
+                            | <small>Complete: {{ todo.isDone }}</small>
+                            | <small>Attachment: {{ todo.hasAttachment }}</small>
+                            | <small>ID: {{ todo._id }}</small>
+                            <!-- Button trigger modal -->
+                            <br><button class="btn btn-danger" ng-click="confirmDeletion()" data-toggle="modal" data-target="#myModal">Remove</button><hr>
+                        </li>
+                    </div>
+                    <!-- Modal -->
+                    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="confirm-delete-modal">
+                      <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" id="confirm-delete-modal">Confirm Deletion</h4>
+                          </div>
+                          <div class="modal-body">
+                            <div class="alert alert-danger" ng-show="confirmDeleteMessage.length > 0">
+                              <div>{{ confirmDeleteMessage }}</div>
+                              <div>Todo: <strong>{{ confirmDeleteTask }}</strong></div>
+                              <div>ID: <strong>{{ confirmDeleteId }}</strong></div>
+                            </div>
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-success" ng-click="removeTodo(confirmDeleteId)" data-dismiss="modal">Yes</button>
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+                
+            </div>
+            
+		</div>
+
+    </body>
+</html>
