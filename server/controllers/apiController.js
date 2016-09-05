@@ -48,8 +48,9 @@ module.exports = function (app) {
 	// find and update todos
 	app.post('/api/todo', function (req, res) {
 		// if request body has an id item already exists so update
+		console.log(req.body);
 		if(req.body.id) {
-			Todos.findByIdAndUpdate(req.body.id, { todo: req.body.todo, isDone: req.body.isDone, hasAttachment: req.body.hasAttachment }, function (err, todo) {
+			Todos.findByIdAndUpdate(req.body.id, { todo: req.body.todo, username: req.body.username, isDone: req.body.isDone, hasAttachment: req.body.hasAttachment }, function (err, todo) {
 				if(err) throw err;
 
 				res.send('Success');
