@@ -36,7 +36,7 @@
       </nav>
     </header>
     <div class="container">
-      <div ng-controller="mainController" ng-init="initFirst()">
+      <div ng-controller="mainController" ng-cloak ng-init="initFirst()">
 
         <div class="row">
             <div class="col-xs-12 col-sm-4">
@@ -65,6 +65,7 @@
               <!-- Button confirm delete trigger modal -->
               <br><button class="btn btn-danger" ng-click="confirmDeletion()" data-toggle="modal" data-target="#myModal">Remove</button>
               <!-- Button edit trigger modal -->
+              <button class="btn btn-primary" ng-click="duplicate()">Duplicate</button>
               <button class="btn btn-info" ng-click="edit()" data-toggle="modal" data-target="#editModal">Edit</button><hr>
               </li>
             </ul>
@@ -107,10 +108,8 @@
                     <input type="text" class="form-control" ng-model="editTodo.todo">
                     <label>Complete:</label>
                     <select class="form-control" ng-options="option as option.label for option in isDoneOptions" ng-model="editTodo.isDone"></select>
-                    <p>{{ editTodo.isDone }}</p>
                     <label>Attachment:</label>
-                    <select class="form-control" ng-options="option as option.label for option in hasAttachmentOptions" ng-model="editTodo.hasAttachment"></select>
-                    <p>{{ editTodo.hasAttachment }}</p><br>
+                    <select class="form-control" ng-options="option as option.label for option in hasAttachmentOptions" ng-model="editTodo.hasAttachment"></select><br>
                     <input type="submit" value="Submit" class="btn btn-info">
                   </form>
                 </div>

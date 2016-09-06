@@ -45,7 +45,7 @@ myApp.controller('mainController', ['$scope', '$filter', '$http', '$timeout', fu
             $scope.$apply(function () {
                 $scope.alertText = '';
             })
-        }, 2000);
+        }, 1500);
     }
 
     // select pertaining select element option value
@@ -106,6 +106,11 @@ myApp.controller('mainController', ['$scope', '$filter', '$http', '$timeout', fu
             });
     }
 
+    // duplicate todo entry
+    $scope.duplicate = function () {
+        
+    }
+
     // edit todo
     $scope.edit = function () {
         console.log('Editing');
@@ -142,9 +147,9 @@ myApp.controller('mainController', ['$scope', '$filter', '$http', '$timeout', fu
                      $scope.initFirst();
 
                     // close modal
-                     setTimeout(function() {
+                     $timeout(function() {
                         $('#editModal').modal('hide');
-                     }, 1100);
+                     }, 1500);
                 }
             })
             request.error(function (data, status, header, config) {
