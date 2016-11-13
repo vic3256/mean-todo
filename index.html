@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en-us" ng-app="myApp">
+<html lang="en-us" ng-app="myApp" ng-cloak>
   <head>
     <title>Learn and Understand AngularJS</title>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge">
@@ -41,7 +41,7 @@
         <div class="row">
             <div class="col-xs-12 col-sm-4">
               <h3>Add Todo</h3>
-              <form ng-submit="addTodo()" method="POST">
+              <form ng-submit="addTodo(newTodo)" method="POST">
                 <label>Username:</label>
                 <input type="text" class="form-control" ng-model="newTodo.username" required="">
                 <label>New To Do:</label>
@@ -119,7 +119,7 @@
               </div>
             </div>
           </div>
-        </div> 
+        </div> <!-- .row -->
 
       </div>
     </div> <!-- .container -->

@@ -6,6 +6,7 @@ myApp.controller('mainController', ['$scope', '$filter', '$http', '$timeout', fu
     $scope.initFirst = function () {
         $http.get('http://localhost:3000/api/todos/')
             .success(function (data) {
+                // 'todos' is the array that gets looped to display each todo
                 $scope.todos = data;
             })
             .error(function (data, status) {
@@ -15,40 +16,17 @@ myApp.controller('mainController', ['$scope', '$filter', '$http', '$timeout', fu
 
     // options for isDone
     $scope.isDoneOptions = [
-        {
-            value: true,
-            label: 'Complete'
-        },
-        {
-            value: false,
-            label: 'Incomplete'
-        }
+        { value: true, label: 'Complete' },
+        { value: false, label: 'Incomplete' }
     ];
 
     // options for hasAttachment
     $scope.hasAttachmentOptions = [
-        {
-            value: true,
-            label: 'Yes'
-        },
-        {
-            value: false,
-            label: 'No'
-        }
+        { value: true, label: 'Yes' },
+        { value: false, label: 'No' }
     ];
 
-    // confirmation message
-    $scope.confirmationMessage = function (msg) {
-        $scope.alertText = msg;
-        $timeout(function() {
-            // start angular digest cycle
-            $scope.$apply(function () {
-                $scope.alertText = '';
-            })
-        }, 1500);
-    }
-
-    // select pertaining select element option value
+    // assign value to select element option value
     $scope.selectActiveOption = function (currentTodo) {
         if(currentTodo.isDone === false) {
             currentTodo.isDone = $scope.isDoneOptions[1];
@@ -63,7 +41,7 @@ myApp.controller('mainController', ['$scope', '$filter', '$http', '$timeout', fu
         }
     }
 
-    // assign option a boolean value
+    // assign select option a boolean value
     $scope.assignOptionValue = function (currentTodo) {
         if(currentTodo.isDone.label === 'Incomplete')  {
             currentTodo.isDone = false;
@@ -78,23 +56,40 @@ myApp.controller('mainController', ['$scope', '$filter', '$http', '$timeout', fu
         }
     }
 
-    // add todo
-    $scope.addTodo = function () {
+    //////////////////////////////////
+    // Confirmation Message
+    //////////////////////////////////
+    $scope.confirmationMessage = function (msg) {
+        $scope.alertText = msg;
+        $timeout(function() {
+            // start angular digest cycle
+            $scope.$apply(function () {
+                $scope.alertText = '';
+            })
+        }, 1500);
+    }
 
-        // assign option a boolean value
-        $scope.assignOptionValue($scope.newTodo);
+    //////////////////////////////////
+    // Add Todo
+    //////////////////////////////////
+    $scope.addTodo = function (todo) {
 
-        var request = $http.post('http://localhost:3000/api/todo', $scope.newTodo);
+        // assign options a boolean value
+        $scope.assignOptionValue(todo);
+
+        var request = $http.post('http://localhost:3000/api/todo', todo);
 
             request.success(function (data, status) {
                 console.log('Status ' + status);
                 if (status === 200) {
                      $scope.todos = data;
-                     $scope.confirmationMessage('Add Successful');
-                     // clear input value for each object value
-                     Object.keys($scope.newTodo).map(function (todo) {
-                         return $scope.newTodo[todo] = '';
-                     });
+                     $scope.confirmationMessage('Success');
+                     // clear input field value for each object value on $scope.newTodo form
+                     if($scope.newTodo) {
+                        Object.keys($scope.newTodo).map(function (todo) {
+                            return $scope.newTodo[todo] = '';
+                        });
+                     }
                      $scope.initFirst();
                 }
             })
@@ -106,12 +101,29 @@ myApp.controller('mainController', ['$scope', '$filter', '$http', '$timeout', fu
             });
     }
 
-    // duplicate todo entry
+    //////////////////////////////////
+    // Duplicate Todo entry
+    //////////////////////////////////
     $scope.duplicate = function () {
-        
+
+        // new object to hold duplicated info
+        $scope.duplicatedTodo = {};
+
+        // remove _id string so api endpoint will not update the existing todo, instead create a new todo
+        $scope.duplicatedTodo._id = '';
+        $scope.duplicatedTodo.username = this.todo.username;
+        $scope.duplicatedTodo.todo = this.todo.todo;
+        $scope.duplicatedTodo.isDone = this.todo.isDone;
+        $scope.duplicatedTodo.hasAttachment = this.todo.hasAttachment;
+
+        // add todo
+        $scope.addTodo($scope.duplicatedTodo);
+
     }
 
-    // edit todo
+    //////////////////////////////////
+    // Edit Todo
+    //////////////////////////////////
     $scope.edit = function () {
         console.log('Editing');
         $scope.editTodo = {};
@@ -125,7 +137,9 @@ myApp.controller('mainController', ['$scope', '$filter', '$http', '$timeout', fu
         $scope.selectActiveOption($scope.editTodo);
     }
 
-    // submit editted todo
+    //////////////////////////////////
+    // Submit Editted Todo
+    //////////////////////////////////
     $scope.submitEdit = function () {
         console.log('Submitting Edit');
 
@@ -160,14 +174,18 @@ myApp.controller('mainController', ['$scope', '$filter', '$http', '$timeout', fu
             });
     }
 
-    // confirm delete todo
+    //////////////////////////////////
+    // Confirm Deletion of Todo
+    //////////////////////////////////
     $scope.confirmDeletion = function () {
         $scope.confirmDeleteId = this.todo._id;
         $scope.confirmDeleteTask = this.todo.todo;
         $scope.confirmDeleteMessage = 'Are you sure you want to delete this todo?';
     }
 
-    // delete todo
+    //////////////////////////////////
+    // Delete Todo
+    //////////////////////////////////
     $scope.removeTodo = function(id) {
         $http({ url: 'http://localhost:3000/api/todo/', 
                 method: 'DELETE', 

@@ -53,7 +53,7 @@ module.exports = function (app) {
 			Todos.findByIdAndUpdate(req.body.id, { todo: req.body.todo, username: req.body.username, isDone: req.body.isDone, hasAttachment: req.body.hasAttachment }, function (err, todo) {
 				if(err) throw err;
 
-				res.send('Success');
+				res.send('Success - express');
 			});
 		}
 
@@ -93,7 +93,7 @@ module.exports = function (app) {
 		Todos.findByIdAndRemove(req.body.id, function (err) {
 			if(err) throw err;
 			console.log('Deleted ' + req.body.id);
-			res.send('Success');
+			res.send('Delete Success - express');
 		});
 
 	});
