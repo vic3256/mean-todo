@@ -41,7 +41,7 @@
         <div class="row">
             <div class="col-xs-12 col-sm-4">
               <h3>Add Todo</h3>
-              <form ng-submit="addTodo(newTodo)" method="POST">
+              <form ng-submit="addTodo(newTodo)">
                 <label>Username:</label>
                 <input type="text" class="form-control" ng-model="newTodo.username" required="">
                 <label>New To Do:</label>
@@ -101,7 +101,7 @@
                   <h4 class="modal-title" id="confirm-edit-modal">Edit: <strong>{{ editTodo.todo }}</strong></h4>
                 </div>
                 <div class="modal-body">
-                  <form ng-submit="submitEdit()" method="POST">
+                  <form ng-submit="submitEdit()">
                     <label>Username:</label>
                     <input type="text" class="form-control" ng-model="editTodo.username" required="">
                     <label>New To Do:</label>

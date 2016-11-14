@@ -50,10 +50,10 @@ module.exports = function (app) {
 		// if request body has an id item already exists so update
 		console.log(req.body);
 		if(req.body.id) {
-			Todos.findByIdAndUpdate(req.body.id, { todo: req.body.todo, username: req.body.username, isDone: req.body.isDone, hasAttachment: req.body.hasAttachment }, function (err, todo) {
+			Todos.findByIdAndUpdate(req.body.id, { todo: req.body.todo, username: req.body.username, isDone: req.body.isDone, hasAttachment: req.body.hasAttachment }, {new: true}, function (err, todo) {
 				if(err) throw err;
 
-				res.send('Success - express');
+				res.send(todo);
 			});
 		}
 

@@ -14,6 +14,7 @@ myApp.controller('mainController', ['$scope', '$filter', '$http', '$timeout', fu
             });            
     }
 
+    // These options are for the select element dropdown options in html binded with ng-options
     // options for isDone
     $scope.isDoneOptions = [
         { value: true, label: 'Complete' },
@@ -93,6 +94,7 @@ myApp.controller('mainController', ['$scope', '$filter', '$http', '$timeout', fu
                      $scope.initFirst();
                 }
             })
+
             request.error(function (data, status, header, config) {
                 $scope.ResponseDetails = "Data: " + data +
                     "<hr />status: " + status +
@@ -125,7 +127,6 @@ myApp.controller('mainController', ['$scope', '$filter', '$http', '$timeout', fu
     // Edit Todo
     //////////////////////////////////
     $scope.edit = function () {
-        console.log('Editing');
         $scope.editTodo = {};
         $scope.editTodo.id = this.todo._id;
         $scope.editTodo.username = this.todo.username;
@@ -141,37 +142,39 @@ myApp.controller('mainController', ['$scope', '$filter', '$http', '$timeout', fu
     // Submit Editted Todo
     //////////////////////////////////
     $scope.submitEdit = function () {
-        console.log('Submitting Edit');
 
-        // assign option a boolean value
-        $scope.assignOptionValue($scope.editTodo);
+        $scope.addTodo($scope.editTodo);
 
-        var request = $http.post('http://localhost:3000/api/todo', $scope.editTodo);
+        // close modal
+        $('#editModal').modal('hide');
 
-            request.success(function (data, status) {
-                console.log('Status ' + status);
-                if (status === 200) {
-                     $scope.todos = data;
-                     $scope.confirmationMessage('Edit Successful');
 
-                     // select pertaining select element option value
-                     $scope.selectActiveOption($scope.editTodo);
+        // var request = $http.post('http://localhost:3000/api/todo', $scope.editTodo);
 
-                     // new todo list
-                     $scope.initFirst();
+        //     request.success(function (data, status) {
+        //         console.log('Status ' + status);
+        //         if (status === 200) {
+        //              $scope.todos = data;
+        //              $scope.confirmationMessage('Edit Successful');
 
-                    // close modal
-                     $timeout(function() {
-                        $('#editModal').modal('hide');
-                     }, 1500);
-                }
-            })
-            request.error(function (data, status, header, config) {
-                $scope.ResponseDetails = "Data: " + data +
-                    "<hr />status: " + status +
-                    "<hr />headers: " + header +
-                    "<hr />config: " + config;
-            });
+        //              // select pertaining select element option value
+        //              $scope.selectActiveOption($scope.editTodo);
+
+        //              // new todo list
+        //              $scope.initFirst();
+
+        //             // close modal
+        //              $timeout(function() {
+        //                 $('#editModal').modal('hide');
+        //              }, 1500);
+        //         }
+        //     })
+        //     request.error(function (data, status, header, config) {
+        //         $scope.ResponseDetails = "Data: " + data +
+        //             "<hr />status: " + status +
+        //             "<hr />headers: " + header +
+        //             "<hr />config: " + config;
+        //     });
     }
 
     //////////////////////////////////
