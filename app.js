@@ -83,15 +83,19 @@ myApp.controller('mainController', ['$scope', '$filter', '$http', '$timeout', fu
             request.success(function (data, status) {
                 console.log('Status ' + status);
                 if (status === 200) {
-                     $scope.todos = data;
-                     $scope.confirmationMessage('Success');
-                     // clear input field value for each object value on $scope.newTodo form
-                     if($scope.newTodo) {
+                    // only assign data to 'todos' when adding new todo
+                    if($scope.newTodo) {
+                        $scope.todos = data;
+                    }
+                    // clear input field value for each object value on $scope.newTodo form
+                    if($scope.newTodo) {
                         Object.keys($scope.newTodo).map(function (todo) {
-                            return $scope.newTodo[todo] = '';
-                        });
-                     }
-                     $scope.initFirst();
+                        return $scope.newTodo[todo] = '';
+                    });
+                    }
+                    // populate todo list
+                    $scope.initFirst();
+                    $scope.confirmationMessage('Success');
                 }
             })
 
@@ -145,36 +149,8 @@ myApp.controller('mainController', ['$scope', '$filter', '$http', '$timeout', fu
 
         $scope.addTodo($scope.editTodo);
 
-        // close modal
-        $('#editModal').modal('hide');
-
-
-        // var request = $http.post('http://localhost:3000/api/todo', $scope.editTodo);
-
-        //     request.success(function (data, status) {
-        //         console.log('Status ' + status);
-        //         if (status === 200) {
-        //              $scope.todos = data;
-        //              $scope.confirmationMessage('Edit Successful');
-
-        //              // select pertaining select element option value
-        //              $scope.selectActiveOption($scope.editTodo);
-
-        //              // new todo list
-        //              $scope.initFirst();
-
-        //             // close modal
-        //              $timeout(function() {
-        //                 $('#editModal').modal('hide');
-        //              }, 1500);
-        //         }
-        //     })
-        //     request.error(function (data, status, header, config) {
-        //         $scope.ResponseDetails = "Data: " + data +
-        //             "<hr />status: " + status +
-        //             "<hr />headers: " + header +
-        //             "<hr />config: " + config;
-        //     });
+        // close modal with directive
+        $scope.dismissEdit();
     }
 
     //////////////////////////////////
@@ -205,3 +181,18 @@ myApp.controller('mainController', ['$scope', '$filter', '$http', '$timeout', fu
     }
 
 }]);
+
+
+///////////////////////////////////////
+// Close Modal Directive
+///////////////////////////////////////
+myApp.directive('editModal', function() {
+   return {
+     restrict: 'A', // restrict to attribute
+     link: function(scope, element, attr) {
+       scope.dismissEdit = function() {
+           element.modal('hide');
+       };
+     }
+   } 
+});
